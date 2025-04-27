@@ -347,11 +347,6 @@ proc initFullNode(
       elManager: ELManager): OnFinalizedCallback {.nimcall.} =
     static: doAssert (elManager is ref)
     return proc(dag: ChainDAGRef, data: FinalizationInfoObject) =
-      if elManager != nil:
-        let finalizedEpochRef = dag.getFinalizedEpochRef()
-        discard trackFinalizedState(elManager,
-                                    finalizedEpochRef.eth1_data,
-                                    finalizedEpochRef.eth1_deposit_index)
       node.updateLightClientFromDag()
       let eventData =
         if node.currentSlot().epoch() >= dag.cfg.BELLATRIX_FORK_EPOCH:
